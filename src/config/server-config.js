@@ -12,5 +12,7 @@ if (result.error) {
 
 module.exports = {
   PORT: process.env.PORT,
-  SALT_ROUNDS: process.env.SALT_ROUNDS
+  SALT_ROUNDS: process.env.SALT_ROUNDS,
+  JWT_EXPIRY: process.env.JWT_EXPIRY,
+  JWT_SECRATE: process.env.JWT_SECRATE
 };

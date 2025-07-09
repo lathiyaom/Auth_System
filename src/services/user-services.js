@@ -1,7 +1,10 @@
 const { UserRepository } = require("../repositories")
 
-const { AppError } = require("../utils/error/app-error");
+const  AppError  = require("../utils/error/app-error");
+
 const { StatusCodes } = require("http-status-codes");
+
+const { Auth } = require('../utils/common')
 
 const userRepo = new UserRepository();
 
@@ -18,6 +21,34 @@ async function createUser(data) {
         throw new AppError("Cannot create a new City object", StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
+
+async function signin(data) {
+    try {
+        const user = await userRepo.getUserByEmail(data.email);
+
+        if (!user) {
+            throw new AppError("No user found for the given email", StatusCodes.BAD_REQUEST);
+        }
+
+        const passWordCheck = Auth.checkPassword(data.password, user.password);
+
+        if (!passWordCheck) {
+
+            throw new AppError('Invalid password', StatusCodes.BAD_REQUEST)
+        }
+
+        const jwt = Auth.creatToken({ id: user.id, email: user.email });
+
+        return jwt;
+
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+
 module.exports = {
-    createUser
+    createUser,
+    signin
 }
