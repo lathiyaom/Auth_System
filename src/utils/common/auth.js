@@ -31,11 +31,24 @@ async function creatToken(input) {
 
     }
 
-
 }
 
 
+async function verifyToken(jwtToken) {
+
+    try {
+
+        return jsonwebtoken.verify(jwtToken, ServerConfig.JWT_SECRATE);
+    } catch (error) {
+
+        console.lof(error)
+        throw error;
+    }
+
+}
+
 module.exports = {
     checkPassword,
-    creatToken
+    creatToken,
+    verifyToken
 }
